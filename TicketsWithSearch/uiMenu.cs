@@ -33,7 +33,7 @@ namespace TicketsFull
                             System.Environment.Exit(0);
                         break;
                 }
-            } while (!userChoice.Equals("3"));
+            } while (!userChoice.Equals("4"));
 
         }
 
@@ -99,16 +99,19 @@ namespace TicketsFull
 
         private void chooseSearch()
         {
-            string searchChoice;
+            string userSearch;
+            string searchTerm;
             do
             {
-                string userSearch;
                 Console.WriteLine("What would you like to search?");
+                Console.WriteLine("1. Status");
+                Console.WriteLine("3. Priority");
+                Console.WriteLine("4. Submitter");
                 userSearch = Console.ReadLine();
-                TicketHandler.searchFiles(userSearch);
-                Console.WriteLine("any key to search again(q to quit)");
-                searchChoice = Console.ReadLine();
-            } while (searchChoice != null && (!searchChoice.Equals("q") && !searchChoice.Equals("Q")));
+            } while (!userSearch.Equals("1") && !userSearch.Equals("3") && !userSearch.Equals("4"));
+            Console.WriteLine("What would you like to search for?");
+            searchTerm = Console.ReadLine();
+            TicketHandler.SearchFiles(userSearch, searchTerm);
         }
 
     }

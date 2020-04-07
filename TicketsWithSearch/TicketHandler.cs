@@ -14,7 +14,7 @@ namespace TicketsFull
         private static string taskFile = @"Tasks.csv";
         private static string enhancementFile = @"Enhancements.csv";
         private static string defectFile = @"Defects.csv";
-        private static string[] fileList = new string[3]{@"Tasks.csv",@"Enhancements.csv",@"Defects.csv"};
+        private static List<string> fileList = new List<string>(){@"Tasks.csv",@"Enhancements.csv",@"Defects.csv"};
 
         //lets gather em in some lists
         static List<Tickets.Task> taskList = new List<Tickets.Task>();
@@ -193,95 +193,29 @@ namespace TicketsFull
             }
         }
 
-        public static void searchFiles(string userSearch)
+        public static void SearchFiles(string userSearch, string searchTerm)
         {
-            string searchResults = new List<string>();
-            string totalTickets = "";
-            for (int i = 0; i < 3; i++)
+            int counter = 0;
+            foreach (var g in fileList)
             {
-                totalTickets += File.ReadAllLines(fileList[i]);
-            }
-
-            for (int i = 0; i < 3; i++)
-            {
-                foreach (string correctLine in totalTickets.Split('\n'))
+                using (StreamReader sr = new StreamReader(g))
                 {
-                    if (!string.IsNullOrEmpty(correctLine))
+                    while (!sr.EndOfStream)
                     {
-                        bool found = false;
-                        foreach (var matches in correctLine.Split(','))
+                        string line = sr.ReadLine();
+                        // convert string to array
+                        string[] arr = line.Split(',');
+                        if (arr[int.Parse(userSearch)].Contains(searchTerm))
                         {
-                            bool findMatch = matches.ToUpper().Contains(userSearch.ToUpper());
-                            if (findMatch)
-                            {
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (found)
-                        {
-                            searchResults.Add(correctLine);
+                            counter++;
+                            Console.WriteLine(line);
                         }
                     }
                 }
             }
-
-            for (int i = 0; i < searchResults.Count; i++)
-            {
-                Console.WriteLine(searchResults[i]);
-            }
+            Console.WriteLine("There were " + counter + " results returned by the search!");
         }
 
-        /* var file1Lines = File.ReadAllText(@"Tasks.csv");
-         var file2Lines = File.ReadAllText(@"Enhancements.csv");
-         var file3Lines = File.ReadAllText(@"Defects.csv");
-
-         foreach (string correctLine in file1Lines.Split('\n'))
-         {
-             if (!string.IsNullOrEmpty(correctLine))
-             {
-                 bool found = false;
-                 foreach (var matches in correctLine.Split(','))
-                 {
-                     bool findMatch = matches.ToUpper().Contains(userSearch.ToUpper());
-                     if (findMatch)
-                     {
-                         found = true;
-                         break;
-                     }
-                 }
-
-                 if (found)
-                 {
-                     searchResults.Add(correctLine);
-                 }
-             }
-         }
-         foreach (string correctLine in file2Lines.Split('\n'))
-         {
-             if (!string.IsNullOrEmpty(correctLine))
-             {
-                 bool found = false;
-                 foreach (var matches in correctLine.Split(','))
-                 {
-                     bool findMatch = matches.ToUpper().Contains(userSearch.ToUpper());
-                     if (findMatch)
-                     {
-                         found = true;
-                         break;
-                     }
-                 }
-
-                 if (found)
-                 {
-                     searchResults.Add(correctLine);
-                 }
-             }
-         }*/
-            // var splitLine = correctLine.Split(new char[] {','});
-            //if(correctLine.Split(','[1]).Equals(userSearch))
-       // }
 
         public static void FindTopId()
         {
